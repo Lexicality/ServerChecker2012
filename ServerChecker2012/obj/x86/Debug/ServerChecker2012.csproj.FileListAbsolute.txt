@@ -1,0 +1,10 @@
+d:\Documents\Visual Studio 2010\Projects\ServerChecker2012\ServerChecker2012\obj\x86\Debug\ResolveAssemblyReference.cache
+d:\Documents\Visual Studio 2010\Projects\ServerChecker2012\ServerChecker2012\obj\x86\Debug\ServerChecker2012.MainWindow.resources
+d:\Documents\Visual Studio 2010\Projects\ServerChecker2012\ServerChecker2012\obj\x86\Debug\ServerChecker2012.Properties.Resources.resources
+d:\Documents\Visual Studio 2010\Projects\ServerChecker2012\ServerChecker2012\obj\x86\Debug\GenerateResource.read.1.tlog
+d:\Documents\Visual Studio 2010\Projects\ServerChecker2012\ServerChecker2012\obj\x86\Debug\GenerateResource.write.1.tlog
+d:\Documents\Visual Studio 2010\Projects\ServerChecker2012\ServerChecker2012\bin\Debug\ServerChecker2012.exe
+d:\Documents\Visual Studio 2010\Projects\ServerChecker2012\ServerChecker2012\bin\Debug\ServerChecker2012.pdb
+d:\Documents\Visual Studio 2010\Projects\ServerChecker2012\ServerChecker2012\obj\x86\Debug\ServerChecker2012.exe
+d:\Documents\Visual Studio 2010\Projects\ServerChecker2012\ServerChecker2012\obj\x86\Debug\ServerChecker2012.pdb
+D:\Documents\Visual Studio 2010\Projects\ServerChecker2012\ServerChecker2012\obj\x86\Debug\ServerChecker2012.EditForm.resources

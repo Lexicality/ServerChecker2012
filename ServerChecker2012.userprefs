@@ -1,0 +1,24 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="ServerChecker2012/ServerData.cs">
+    <Files>
+      <File FileName="ServerChecker2012/Program.cs" Line="5" Column="17" />
+      <File FileName="ServerChecker2012/MainWindow.cs" Line="198" Column="50" />
+      <File FileName="ServerChecker2012/ServerData.cs" Line="212" Column="14" />
+      <File FileName="ServerChecker2012/EditForm.cs" Line="39" Column="44" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State expanded="True">
+          <Node name="ServerChecker2012" expanded="True">
+            <Node name="ServerData.cs" selected="True" />
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

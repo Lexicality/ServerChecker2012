@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<servers>
+  <server>
+    <!-- ID: 1 -->
+    <name>Test Server</name>
+    <executable>D:/srcds/orangebox/srcds.exe</executable>
+    <parameters>-console -game hl2mp +map dm_runoff -maxplayers 16</parameters>
+    <affinity>3</affinity>
+    <ip>192.168.0.2</ip>
+    <port>27015</port>
+    <query type="source" />
+    <timer>
+      <startup>30</startup>
+      <strikes>3</strikes>
+      <interval>15</interval>
+      <shutdown>5</shutdown>
+    </timer>
+  </server>
+  <server>
+    <!-- ID: 2 -->
+    <name>RP4</name>
+    <executable>/Users/Lexi/Documents/Minecraft.exe</executable>
+    <parameters />
+    <ip>74.91.116.247</ip>
+    <port>27015</port>
+    <query type="source" />
+    <timer>
+      <startup>30</startup>
+      <strikes>3</strikes>
+      <interval>15</interval>
+      <shutdown>5</shutdown>
+    </timer>
+  </server>
+</servers>
