@@ -199,7 +199,7 @@ namespace ServerChecker2012
             }
             set
             {
-				if (Affinity.ToInt64 == value)
+				if (Affinity.ToInt64() == value)
 					return;
 				Affinity = new IntPtr(value);
                 if (Affinity == IntPtr.Zero)
