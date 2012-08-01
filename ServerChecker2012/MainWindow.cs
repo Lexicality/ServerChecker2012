@@ -8,26 +8,26 @@ using System.Windows.Forms;
 
 namespace ServerChecker2012
 {
-    public partial class MainWindow : Form
-    {
-        EditForm EditForm = new EditForm();
-        public MainWindow()
-        {
-            InitializeComponent();
-        }
-        List<ServerData> servers;
-        public void LoadServers(ref List<ServerData> servers)
-        {
-            this.servers = servers;
-            foreach (ServerData data in servers)
-            {
-                var server = new ServerListViewItem(data);
-                server.ServerUpdated += new EventHandler(ServerList_ServerUpdated);
-                ServerList.Items.Add(server);
-            }
-        }
+	public partial class MainWindow : Form
+	{
+		EditForm EditForm = new EditForm();
+		public MainWindow()
+		{
+			InitializeComponent();
+		}
+		List<ServerData> servers;
+		public void LoadServers(ref List<ServerData> servers)
+		{
+			this.servers = servers;
+			foreach (ServerData data in servers)
+			{
+				var server = new ServerListViewItem(data);
+				server.ServerUpdated += new EventHandler(ServerList_ServerUpdated);
+				ServerList.Items.Add(server);
+			}
+		}
 
-        private void UpdateButtons()
+		private void UpdateButtons()
 		{
 			if (InvokeRequired)
 			{
@@ -64,11 +64,11 @@ namespace ServerChecker2012
 			StopButton.Enabled = btn_stop;
 
 			/*
-             * Note to self:
-             *  ContextMenuStart is separate from ContextMenuRestart INTENTIONALLY!
-             *  They occupy different positions on the menu so just changing the label
-             *   wouldn't work.
-             */
+			 * Note to self:
+			 *  ContextMenuStart is separate from ContextMenuRestart INTENTIONALLY!
+			 *  They occupy different positions on the menu so just changing the label
+			 *   wouldn't work.
+			 */
 
 			if (qry_enable && qry_disable)
 				ContextMenuDisable.CheckState = CheckState.Indeterminate;
@@ -97,49 +97,49 @@ namespace ServerChecker2012
 				ContextMenuDelete.Enabled = enabled;
 				ContextMenuDisable.Enabled = enabled;
 			}
-        }
+		}
 
-        private void ServerList_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            UpdateButtons();
-        }
+		private void ServerList_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			UpdateButtons();
+		}
 
-        private void ServerList_ServerUpdated(object sender, EventArgs e)
-        {
-            UpdateButtons();
-        }
+		private void ServerList_ServerUpdated(object sender, EventArgs e)
+		{
+			UpdateButtons();
+		}
 
-        private void StartServer(object sender, EventArgs e)
-        {
-            foreach (ServerListViewItem data in ServerList.SelectedItems)
-            {
-                data.Server.Start();
-            }
-            UpdateButtons();
-        }
+		private void StartServer(object sender, EventArgs e)
+		{
+			foreach (ServerListViewItem data in ServerList.SelectedItems)
+			{
+				data.Server.Start();
+			}
+			UpdateButtons();
+		}
 
-        private void StopServer(object sender, EventArgs e)
-        {
-            foreach (ServerListViewItem data in ServerList.SelectedItems)
-            {
-                data.Server.Stop();
-            }
-            UpdateButtons();
-        }
+		private void StopServer(object sender, EventArgs e)
+		{
+			foreach (ServerListViewItem data in ServerList.SelectedItems)
+			{
+				data.Server.Stop();
+			}
+			UpdateButtons();
+		}
 
-        private void EditServer(object sender, EventArgs e)
-        {
+		private void EditServer(object sender, EventArgs e)
+		{
 			var items = ServerList.SelectedItems;
 			if (items.Count != 1)
 				return;
 			ServerData server = ((ServerListViewItem) items[0]).Server;
-            EditForm.PrepareEdit(server);
+			EditForm.PrepareEdit(server);
 			if (EditForm.ShowDialog(this) != DialogResult.OK)
 				return;
 			EditForm.DoEdit();
 			Program.SaveData();
-        }
-        private void DeleteServer(object sender, EventArgs e)
+		}
+		private void DeleteServer(object sender, EventArgs e)
 		{
 			var items = ServerList.SelectedItems;
 			int count = items.Count;
@@ -149,11 +149,11 @@ namespace ServerChecker2012
 			else
 				text = "Are you sure you want to delete these servers?";
 			if (MessageBox.Show(this,
-	            text,
-	            "Alert!",
-	            MessageBoxButtons.YesNo,
-	            MessageBoxIcon.Warning,
-	            MessageBoxDefaultButton.Button2) == DialogResult.No)
+				text,
+				"Alert!",
+				MessageBoxButtons.YesNo,
+				MessageBoxIcon.Warning,
+				MessageBoxDefaultButton.Button2) == DialogResult.No)
 			{
 				return;
 			}
@@ -166,186 +166,186 @@ namespace ServerChecker2012
 				Program.PushInfo(String.Format("Server #{0} '{1}' was deleted", data.Server.ID, data.Server.Name), "Main Program");
 			}
 			Program.SaveData();
-        }
+		}
 
-        private void NewServer(object sender, EventArgs e)
-        {
-            EditForm.PrepareNew();
+		private void NewServer(object sender, EventArgs e)
+		{
+			EditForm.PrepareNew();
 			if (EditForm.ShowDialog(this) != DialogResult.OK)
 				return;
 			EditForm.CreateNew(++Program.LastServerID);
 			var data = EditForm.CurrentServer;
 			servers.Add(data);
-		    var server = new ServerListViewItem(data);
-	        server.ServerUpdated += new EventHandler(ServerList_ServerUpdated);
-	        ServerList.Items.Add(server);
+			var server = new ServerListViewItem(data);
+			server.ServerUpdated += new EventHandler(ServerList_ServerUpdated);
+			ServerList.Items.Add(server);
 			Program.SaveData();
-        }
+		}
 
-        private void FileMenuQuit_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
+		private void FileMenuQuit_Click(object sender, EventArgs e)
+		{
+			Close();
+		}
 
-        private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            // Make sure no servers are running before exiting
-            foreach (ServerListViewItem row in ServerList.Items)
-            {
-                if (row.Status == ProcessStatus.RUNNING)
-                {
-                    if (MessageBox.Show(this,
-                        "Are you sure you want to shut down all running servers?",
-                        "Alert!",
-                        MessageBoxButtons.YesNo,
-                        MessageBoxIcon.Warning,
-                        MessageBoxDefaultButton.Button2) == DialogResult.No)
-                    {
-                        e.Cancel = true;
-                    }
-                    return;
-                }
-            }
-        }
+		private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			// Make sure no servers are running before exiting
+			foreach (ServerListViewItem row in ServerList.Items)
+			{
+				if (row.Status == ProcessStatus.RUNNING)
+				{
+					if (MessageBox.Show(this,
+						"Are you sure you want to shut down all running servers?",
+						"Alert!",
+						MessageBoxButtons.YesNo,
+						MessageBoxIcon.Warning,
+						MessageBoxDefaultButton.Button2) == DialogResult.No)
+					{
+						e.Cancel = true;
+					}
+					return;
+				}
+			}
+		}
 
 
-        private void MainWindow_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            foreach (ServerData server in servers)
-            {
-                server.Stop();
-            }
-            // Give everything time to shut down
-            System.Threading.Thread.Sleep(100);
-            Application.Exit();
-        }
+		private void MainWindow_FormClosed(object sender, FormClosedEventArgs e)
+		{
+			foreach (ServerData server in servers)
+			{
+				server.Stop();
+			}
+			// Give everything time to shut down
+			System.Threading.Thread.Sleep(100);
+			Application.Exit();
+		}
 
-        // Oops
-        private void NewButton_Click(object sender, EventArgs e)
-        {
-            if (ServerList.SelectedItems.Count == 0)
-                NewServer(sender, e);
-            else
-                DeleteServer(sender, e);
-        }
+		// Oops
+		private void NewButton_Click(object sender, EventArgs e)
+		{
+			if (ServerList.SelectedItems.Count == 0)
+				NewServer(sender, e);
+			else
+				DeleteServer(sender, e);
+		}
 
-        private void ContextMenuDisable_Click(object sender, EventArgs e)
-        {
-            foreach (ServerListViewItem data in ServerList.SelectedItems)
-            {
-                data.Server.QueriesDisabled = !data.Server.QueriesDisabled;
-            }
-            UpdateButtons();
-        }
+		private void ContextMenuDisable_Click(object sender, EventArgs e)
+		{
+			foreach (ServerListViewItem data in ServerList.SelectedItems)
+			{
+				data.Server.QueriesDisabled = !data.Server.QueriesDisabled;
+			}
+			UpdateButtons();
+		}
 
-    }
-    class ServerListViewItem : ListViewItem
-    {
-        delegate void PingCBack(string Ping);
+	}
+	class ServerListViewItem : ListViewItem
+	{
+		delegate void PingCBack(string Ping);
 		delegate void ProcCBack(string PID, string Status);
 		delegate void InfoCBack();
-        PingCBack mPingCBack;
-        ProcCBack mProcCBack;
+		PingCBack mPingCBack;
+		ProcCBack mProcCBack;
 		InfoCBack mInfoCBack;
 
 		ServerData data;
 
-        public ProcessStatus Status { get; private set; }
-        public ServerData Server { get { return data;  } }
+		public ProcessStatus Status { get; private set; }
+		public ServerData Server { get { return data;  } }
 
-        public event EventHandler ServerUpdated;
+		public event EventHandler ServerUpdated;
 
-        public ServerListViewItem(ServerData data)
-        {
-            this.data = data;
-            Text = data.ID.ToString();
-            var row  = SubItems;
-            var name = row.Add(data.Name);
-            var ip   = row.Add(data.IPAddress);
-            var port = row.Add(data.Port.ToString());
-            var pid  = row.Add("");
-            var stat = row.Add("Offline");
-            var ping = row.Add("N/a");
-            mPingCBack = (string Ping) =>
-            {
-                ping.Text = Ping;
-            };
-            mProcCBack = (string PID, string Status) =>
-            {
-                pid.Text = PID;
-                stat.Text = Status;
-            };
+		public ServerListViewItem(ServerData data)
+		{
+			this.data = data;
+			Text = data.ID.ToString();
+			var row  = SubItems;
+			var name = row.Add(data.Name);
+			var ip   = row.Add(data.IPAddress);
+			var port = row.Add(data.Port.ToString());
+			var pid  = row.Add("");
+			var stat = row.Add("Offline");
+			var ping = row.Add("N/a");
+			mPingCBack = (string Ping) =>
+			{
+				ping.Text = Ping;
+			};
+			mProcCBack = (string PID, string Status) =>
+			{
+				pid.Text = PID;
+				stat.Text = Status;
+			};
 			mInfoCBack = () =>
 			{
 				name.Text = data.Name;
 				ip.Text = data.IPAddress;
 				port.Text = data.Port.ToString();
 			};
-            data.PingChanged += new ServerPingUpdateEventHandler(OnServerPing);
-            data.ProcessChanged += new ServerProcessUpdateEventHandler(OnServerProc);
+			data.PingChanged += new ServerPingUpdateEventHandler(OnServerPing);
+			data.ProcessChanged += new ServerProcessUpdateEventHandler(OnServerProc);
 			data.InfoChanged += new EventHandler(OnServerInfo);
-        }
-        void FireUpdateEvent()
-        {
-            EventHandler Event = ServerUpdated;
-            if (Event != null)
-                Event(this, EventArgs.Empty);
-        }
-        void OnServerPing(Object server, ServerPingUpdateEventArgs args)
-        {
-            long ping = args.LastQuery;
-            string text;
-            if (ping >= 0)
-            {
-                text = ping.ToString("##0ms");
-            }
-            else if (ping == -1)
-            {
-                text = "No Response";
-            }
-            else if (ping == -2)
-            {
-                text = "N/a";
-            }
-            else
-            {
-                text = "Error";
-            }
-            object[] arg = new object[] { text };
-            this.ListView.Invoke(mPingCBack, arg); 
-        }
-        void OnServerProc(Object server, ServerProcessUpdateEventArgs args)
-        {
-            if (this.Status != args.Status)
-                FireUpdateEvent();
-            this.Status = args.Status;
+		}
+		void FireUpdateEvent()
+		{
+			EventHandler Event = ServerUpdated;
+			if (Event != null)
+				Event(this, EventArgs.Empty);
+		}
+		void OnServerPing(Object server, ServerPingUpdateEventArgs args)
+		{
+			long ping = args.LastQuery;
+			string text;
+			if (ping >= 0)
+			{
+				text = ping.ToString("##0ms");
+			}
+			else if (ping == -1)
+			{
+				text = "No Response";
+			}
+			else if (ping == -2)
+			{
+				text = "N/a";
+			}
+			else
+			{
+				text = "Error";
+			}
+			object[] arg = new object[] { text };
+			this.ListView.Invoke(mPingCBack, arg); 
+		}
+		void OnServerProc(Object server, ServerProcessUpdateEventArgs args)
+		{
+			if (this.Status != args.Status)
+				FireUpdateEvent();
+			this.Status = args.Status;
 
-            String PID = args.ProcessID != -1 ? args.ProcessID.ToString() : "";
-            String Status;
-            switch (args.Status)
-            {
-                case ProcessStatus.INACTIVE:
-                    Status = "Offline";
-                    break;
-                case ProcessStatus.STARTING:
-                    Status = "Starting";
-                    break;
-                case ProcessStatus.RUNNING:
-                    Status = "Running";
-                    break;
-                case ProcessStatus.FROZEN:
-                    Status = "Frozen";
-                    break;
-                default:
-                    Status = "Internal error";
-                    break;
-            }
-            object[] arg = new object[] { PID, Status };
-            this.ListView.Invoke(mProcCBack, arg); 
-        }
+			String PID = args.ProcessID != -1 ? args.ProcessID.ToString() : "";
+			String Status;
+			switch (args.Status)
+			{
+				case ProcessStatus.INACTIVE:
+					Status = "Offline";
+					break;
+				case ProcessStatus.STARTING:
+					Status = "Starting";
+					break;
+				case ProcessStatus.RUNNING:
+					Status = "Running";
+					break;
+				case ProcessStatus.FROZEN:
+					Status = "Frozen";
+					break;
+				default:
+					Status = "Internal error";
+					break;
+			}
+			object[] arg = new object[] { PID, Status };
+			this.ListView.Invoke(mProcCBack, arg); 
+		}
 		void OnServerInfo(Object sender, EventArgs args)
 		{
 			this.ListView.Invoke(mInfoCBack);
 		}
-    }
+	}
 }

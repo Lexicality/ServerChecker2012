@@ -9,129 +9,129 @@ using System.Text.RegularExpressions;
 
 namespace ServerChecker2012
 {
-    public partial class EditForm : Form
-    {
-        static Regex unicode = new Regex(@"[^\u0000-\u007F]");
-        static string PublicIP = "127.0.0.0";
-        static int ProcessorCount = Environment.ProcessorCount;
-        static EditForm()
-        {
-            foreach (IPAddress ip in Dns.GetHostEntry(Dns.GetHostName()).AddressList)
-            {
-                if (ip.AddressFamily == AddressFamily.InterNetwork)
-                {
-                    PublicIP = ip.ToString();
-                    return;
-                }
-            }
-        }
-        static Color NormalColour = SystemColors.WindowText;
-        static Color FadeColour = SystemColors.GrayText;
-        static Color ErrorColour = Color.Red;
+	public partial class EditForm : Form
+	{
+		static Regex unicode = new Regex(@"[^\u0000-\u007F]");
+		static string PublicIP = "127.0.0.0";
+		static int ProcessorCount = Environment.ProcessorCount;
+		static EditForm()
+		{
+			foreach (IPAddress ip in Dns.GetHostEntry(Dns.GetHostName()).AddressList)
+			{
+				if (ip.AddressFamily == AddressFamily.InterNetwork)
+				{
+					PublicIP = ip.ToString();
+					return;
+				}
+			}
+		}
+		static Color NormalColour = SystemColors.WindowText;
+		static Color FadeColour = SystemColors.GrayText;
+		static Color ErrorColour = Color.Red;
 
-        public EditForm()
-        {
-            InitializeComponent();
-            var quitems = QueryType.Items;
-            quitems.Clear();
-            quitems.Add("None");
-            quitems.Add("Source");
-            // setup processor affinity box
-            if (ProcessorCount > 8)
-                ProcessorAffinity.ColumnWidth = 17;
-            else if (ProcessorCount > 4)
-                ProcessorAffinity.ColumnWidth = 35;
-            else
-                ProcessorAffinity.ColumnWidth = 70;
-            ProcessorAffinity.Items.Clear();
-            for (var i = 1; i <= ProcessorCount; ++i)
-                ProcessorAffinity.Items.Add(i.ToString(i < 10 ? " 0" : "00"));
-        }
+		public EditForm()
+		{
+			InitializeComponent();
+			var quitems = QueryType.Items;
+			quitems.Clear();
+			quitems.Add("None");
+			quitems.Add("Source");
+			// setup processor affinity box
+			if (ProcessorCount > 8)
+				ProcessorAffinity.ColumnWidth = 17;
+			else if (ProcessorCount > 4)
+				ProcessorAffinity.ColumnWidth = 35;
+			else
+				ProcessorAffinity.ColumnWidth = 70;
+			ProcessorAffinity.Items.Clear();
+			for (var i = 1; i <= ProcessorCount; ++i)
+				ProcessorAffinity.Items.Add(i.ToString(i < 10 ? " 0" : "00"));
+		}
 
-        void ResetMarkers(Color target)
-        {
-            NameBox.ForeColor = target;
-            IPBox.ForeColor = target;
-            PortBox.ForeColor = target;
-            ParamBox.ForeColor = target;
-            StartupTime.ForeColor = target;
-            ShutdownTime.ForeColor = target;
-            QueryInterval.ForeColor = target;
-            QueryStrikes.ForeColor = target;
-        }
+		void ResetMarkers(Color target)
+		{
+			NameBox.ForeColor = target;
+			IPBox.ForeColor = target;
+			PortBox.ForeColor = target;
+			ParamBox.ForeColor = target;
+			StartupTime.ForeColor = target;
+			ShutdownTime.ForeColor = target;
+			QueryInterval.ForeColor = target;
+			QueryStrikes.ForeColor = target;
+		}
 
-        void TextBoxCheck(object tbox, string original)
-        {
-            TextBox box = (TextBox) tbox;
-            box.ForeColor = (box.Text == original) ? FadeColour : NormalColour;
-        }
-        void NumericCheck(object nbox, int original)
-        {
-            NumericUpDown box = (NumericUpDown) nbox;
-            box.ForeColor = (box.Value == original) ? FadeColour : NormalColour;
-        }
+		void TextBoxCheck(object tbox, string original)
+		{
+			TextBox box = (TextBox) tbox;
+			box.ForeColor = (box.Text == original) ? FadeColour : NormalColour;
+		}
+		void NumericCheck(object nbox, int original)
+		{
+			NumericUpDown box = (NumericUpDown) nbox;
+			box.ForeColor = (box.Value == original) ? FadeColour : NormalColour;
+		}
 
-        ServerData server = null;
+		ServerData server = null;
 		public ServerData CurrentServer { get { return server; } }
 
-        public void PrepareNew()
-        {
+		public void PrepareNew()
+		{
 			this.Text = "New Server";
 			SaveButton.Enabled = true;
-            server = null;
-            ResetMarkers(NormalColour);
-            NameBox.Text = "";
-            IPBox.Text = PublicIP;
-            PortBox.Value = 27015;
-            ExeBox.Text = "";
+			server = null;
+			ResetMarkers(NormalColour);
+			NameBox.Text = "";
+			IPBox.Text = PublicIP;
+			PortBox.Value = 27015;
+			ExeBox.Text = "";
 			ExePicker.InitialDirectory = "C:/";
-            StartupTime.Value = 30;
-            ShutdownTime.Value = 5;
-            QueryInterval.Value = 15;
-            QueryStrikes.Value = 3;
-            ProcessorAffinity.ClearSelected();
-            QueryType.SelectedIndex = 1;
-        }
-        
-        public void PrepareEdit(ServerData server)
-        {
-            if (server == null)
-                throw new ArgumentNullException("server");
+			StartupTime.Value = 30;
+			ShutdownTime.Value = 5;
+			QueryInterval.Value = 15;
+			QueryStrikes.Value = 3;
+			ProcessorAffinity.ClearSelected();
+			QueryType.SelectedIndex = 1;
+		}
+		
+		public void PrepareEdit(ServerData server)
+		{
+			if (server == null)
+				throw new ArgumentNullException("server");
 			this.Text = "Edit Server";
 			SaveButton.Enabled = true;
-            this.server = server;
-            ResetMarkers(FadeColour);
-            NameBox.Text = server.Name;
-            IPBox.Text = server.IPAddress;
-            PortBox.Value = server.Port;
-            ExeBox.Text = server.Executable;
+			this.server = server;
+			ResetMarkers(FadeColour);
+			NameBox.Text = server.Name;
+			IPBox.Text = server.IPAddress;
+			PortBox.Value = server.Port;
+			ExeBox.Text = server.Executable;
 			if (System.IO.File.Exists(ExeBox.Text))
-	            ExePicker.InitialDirectory = System.IO.Path.GetDirectoryName(ExeBox.Text);
+				ExePicker.InitialDirectory = System.IO.Path.GetDirectoryName(ExeBox.Text);
 			else
 				ExePicker.InitialDirectory = "C:/";
-            ParamBox.Text = server.Parameters;
-            StartupTime.Value = server.TimingData.Startup;
-            ShutdownTime.Value = server.TimingData.Shutdown;
-            QueryInterval.Value = server.TimingData.Interval;
-            QueryStrikes.Value = server.TimingData.Strikes;
-            switch (server.Query)
-            {
-                case ServerChecker2012.QueryType.NONE:
-                    this.QueryType.SelectedIndex = 0;
-                    break;
-                case ServerChecker2012.QueryType.SOURCE:
-                    this.QueryType.SelectedIndex = 1;
-                    break;
-                default:
-                    this.QueryType.SelectedIndex = 0;
-                    break;
-            }
-            Int64 affinity = server.ProcessAffinity;
-            for (var i = 0; i < ProcessorCount; ++i)
-                if ((affinity & 1 << i) > 0)
-                    ProcessorAffinity.SetSelected(i, true);
+			ParamBox.Text = server.Parameters;
+			StartupTime.Value = server.TimingData.Startup;
+			ShutdownTime.Value = server.TimingData.Shutdown;
+			QueryInterval.Value = server.TimingData.Interval;
+			QueryStrikes.Value = server.TimingData.Strikes;
+			switch (server.Query)
+			{
+				case ServerChecker2012.QueryType.NONE:
+					this.QueryType.SelectedIndex = 0;
+					break;
+				case ServerChecker2012.QueryType.SOURCE:
+					this.QueryType.SelectedIndex = 1;
+					break;
+				default:
+					this.QueryType.SelectedIndex = 0;
+					break;
+			}
+			Int64 affinity = server.ProcessAffinity;
+			for (var i = 0; i < ProcessorCount; ++i)
+				if ((affinity & 1 << i) > 0)
+					ProcessorAffinity.SetSelected(i, true);
 
-        }
+		}
 
 		public void CreateNew(ushort id)
 		{
@@ -145,14 +145,14 @@ namespace ServerChecker2012
 			timer.Shutdown = (ushort) this.ShutdownTime.Value;
 
 			server = new ServerData (id,
-			                        this.NameBox.Text,
-			                        this.IPBox.Text,
-			                        (ushort) this.PortBox.Value,
-			                        this.ExeBox.Text,
-			                        this.ParamBox.Text,
-			                        CalculateAffinity(),
-			                        CalculateQueryType(),
-			                        timer);
+									this.NameBox.Text,
+									this.IPBox.Text,
+									(ushort) this.PortBox.Value,
+									this.ExeBox.Text,
+									this.ParamBox.Text,
+									CalculateAffinity(),
+									CalculateQueryType(),
+									timer);
 		}
 
 		public void DoEdit()
@@ -197,23 +197,23 @@ namespace ServerChecker2012
 			return query;
 		}
 
-        private void ExeButton_Click(object sender, EventArgs e)
-        {
-            var res = ExePicker.ShowDialog();
-            if (res == DialogResult.OK)
-            {
-                ExeBox.Text = ExePicker.FileName;
-            }
-        }
+		private void ExeButton_Click(object sender, EventArgs e)
+		{
+			var res = ExePicker.ShowDialog();
+			if (res == DialogResult.OK)
+			{
+				ExeBox.Text = ExePicker.FileName;
+			}
+		}
 
-        private void NameBox_TextChanged(object sender, EventArgs e)
-        {
-            if (server == null)
-                return;
-            TextBoxCheck(sender, server.Name);
-        }
+		private void NameBox_TextChanged(object sender, EventArgs e)
+		{
+			if (server == null)
+				return;
+			TextBoxCheck(sender, server.Name);
+		}
 
-        private void IPBox_TextChanged(object sender, EventArgs e)
+		private void IPBox_TextChanged(object sender, EventArgs e)
 		{
 			if (server == null)
 				return;
@@ -229,48 +229,48 @@ namespace ServerChecker2012
 			{
 				TextBoxCheck(sender, server.IPAddress);
 			}
-        }
+		}
 
-        private void PortBox_ValueChanged(object sender, EventArgs e)
-        {
-            if (server == null)
-                return;
-            NumericCheck(sender, server.Port);
-        }
+		private void PortBox_ValueChanged(object sender, EventArgs e)
+		{
+			if (server == null)
+				return;
+			NumericCheck(sender, server.Port);
+		}
 
-        private void ParamBox_TextChanged(object sender, EventArgs e)
-        {
-            if (server == null)
-                return;
-            TextBoxCheck(sender, server.Parameters);
-        }
+		private void ParamBox_TextChanged(object sender, EventArgs e)
+		{
+			if (server == null)
+				return;
+			TextBoxCheck(sender, server.Parameters);
+		}
 
-        private void StartupTime_ValueChanged(object sender, EventArgs e)
-        {
-            if (server == null)
-                return;
-            NumericCheck(sender, server.TimingData.Startup);
-        }
+		private void StartupTime_ValueChanged(object sender, EventArgs e)
+		{
+			if (server == null)
+				return;
+			NumericCheck(sender, server.TimingData.Startup);
+		}
 
-        private void ShutdownTime_ValueChanged(object sender, EventArgs e)
-        {
-            if (server == null)
-                return;
-            NumericCheck(sender, server.TimingData.Shutdown);
-        }
+		private void ShutdownTime_ValueChanged(object sender, EventArgs e)
+		{
+			if (server == null)
+				return;
+			NumericCheck(sender, server.TimingData.Shutdown);
+		}
 
-        private void QueryInterval_ValueChanged(object sender, EventArgs e)
-        {
-            if (server == null)
-                return;
-            NumericCheck(sender, server.TimingData.Interval);
-        }
+		private void QueryInterval_ValueChanged(object sender, EventArgs e)
+		{
+			if (server == null)
+				return;
+			NumericCheck(sender, server.TimingData.Interval);
+		}
 
-        private void QueryStrikes_ValueChanged(object sender, EventArgs e)
-        {
-            if (server == null)
-                return;
-            NumericCheck(sender, server.TimingData.Strikes);
-        }
-    }
+		private void QueryStrikes_ValueChanged(object sender, EventArgs e)
+		{
+			if (server == null)
+				return;
+			NumericCheck(sender, server.TimingData.Strikes);
+		}
+	}
 }
