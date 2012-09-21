@@ -85,6 +85,7 @@ namespace ServerChecker2012
 			PortBox.Value = 27015;
 			ExeBox.Text = "";
 			ExePicker.InitialDirectory = "C:/";
+            ParamBox.Text = "";
 			StartupTime.Value = 30;
 			ShutdownTime.Value = 5;
 			QueryInterval.Value = 15;
