@@ -151,6 +151,9 @@ namespace ServerChecker2012
 			}
 		}
 
+        //DateTime LastStartup = DateTime.MinValue;
+        TimeSpan RestartDelay = TimeSpan.FromSeconds(1);
+        System.Threading.Timer RestartTimer;
 
 		QueryType query = QueryType.NONE;
 		public QueryType Query
@@ -271,7 +274,12 @@ namespace ServerChecker2012
 			Process.StartInfo.Arguments = parameters;
 			Process.EnableRaisingEvents = true;
 			Process.Exited += new EventHandler(ProcessExited);
-			InternalStatus = ProcessStatus.INACTIVE;
+            InternalStatus = ProcessStatus.INACTIVE;
+
+            RestartTimer = new System.Threading.Timer((Object _) => {
+                if (InternalStatus != ProcessStatus.INACTIVE)
+                    Start();
+            });
 
 			// Queries
 			if (Query == QueryType.SOURCE)
@@ -379,18 +387,39 @@ namespace ServerChecker2012
 		{
 			lock (ProcLock)
 			{
-				if (InternalStatus != ProcessStatus.INACTIVE)
-					// Instantly restart
-					Start();
-				else
-					Stop();
+                if (InternalStatus != ProcessStatus.INACTIVE)
+                {
+                    // Force a delay between restarts
+                    InternalStatus = ProcessStatus.STARTING;
+					SendProcUpdate();
+                    /*
+                    // Slow down crash loops
+                    TimeSpan LongEnough = TimeSpan.FromMinutes(5);
+                    if (DateTime.Now.Subtract(LastStartup) > LongEnough)
+                    {
+                        RestartDelay = TimeSpan.FromSeconds(1);
+                    }
+                    else
+                    {
+                        RestartDelay += TimeSpan.FromSeconds(1);
+                    }
+                    */
+                    // Retrigger the timer
+                    RestartTimer.Change(RestartDelay, TimeSpan.FromMilliseconds(-1));
+                }
+                else
+                {
+                    Stop();
+                }
 			}
 		}
 		void ProcessStartupThread()
 		{
 			try
 			{
-				bool res = Process.WaitForInputIdle((int) TimeSpan.FromSeconds((double) TimingData.Startup).TotalMilliseconds);
+                bool res = true;
+                if (Process.MainWindowHandle != IntPtr.Zero)
+                    res = Process.WaitForInputIdle((int) TimeSpan.FromSeconds((double) TimingData.Startup).TotalMilliseconds);
 				lock (ProcLock)
 				{
 					if (!ProcRunning())
@@ -401,6 +430,7 @@ namespace ServerChecker2012
 					if (res)
 					{
 						strikes = 0;
+                        //LastStartup = DateTime.Now;
 						InternalStatus = ProcessStatus.RUNNING;
 						SendProcUpdate();
 						// Get an immediate ping
