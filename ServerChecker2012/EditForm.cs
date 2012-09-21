@@ -185,7 +185,7 @@ namespace ServerChecker2012
 		ServerChecker2012.QueryType CalculateQueryType()
 		{
 			ServerChecker2012.QueryType query;
-			switch ((string) this.QueryType.SelectedValue)
+			switch ((string) this.QueryType.SelectedItem)
 			{
 				case "Source":
 					query = ServerChecker2012.QueryType.SOURCE;
