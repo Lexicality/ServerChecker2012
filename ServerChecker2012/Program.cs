@@ -92,7 +92,8 @@ namespace ServerChecker2012
 		}
 		public static void PushError(string error, string from)
 		{
-			MessageBox.Show(MainWindow, error, from + " Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            // Don't clog up whatever thread is causing an error right now
+            MainWindow.Invoke(new Action(()=>MessageBox.Show(MainWindow, error, from + " Error!", MessageBoxButtons.OK, MessageBoxIcon.Error)));
 			// TODO: Logging
 		}
 		public static void PushInfo(string info, string from)
