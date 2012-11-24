@@ -177,6 +177,10 @@ namespace ServerChecker2012
 			}
 		}
 		bool runqueries = true;
+		bool last_query_was_error = false;
+		//Timer query_error_renable_timer = new Timer(TimeSpan.FromMinutes(5).TotalMilliseconds);
+		System.Threading.Timer QueryRestorationTimer;
+		TimeSpan RestorationDelay = TimeSpan.FromMinutes(5);
 		public bool QueriesDisabled
 		{
 			get { return !runqueries; }
@@ -280,6 +284,10 @@ namespace ServerChecker2012
 				if (InternalStatus != ProcessStatus.INACTIVE)
 					Start();
 			});
+			QueryRestorationTimer = new System.Threading.Timer((Object _) =>
+			{
+				runqueries = true;
+			});
 
 			// Queries
 			if (Query == QueryType.SOURCE)
@@ -357,9 +365,18 @@ namespace ServerChecker2012
 					catch (Exception e)
 					{
 						PushError("Could not run query", e.Message);
-						Stop();
+						runqueries = false;
+						if (!last_query_was_error)
+						{
+							last_query_was_error = true;
+							// undisable queries in 5 mins to see if it's being less fuss
+							QueryRestorationTimer.Change(RestorationDelay, TimeSpan.FromMilliseconds(-1));
+						}
 						return;
 					}
+					if (last_query_was_error)
+						// Woo we ran a query without dying.
+						last_query_was_error = false;
 				}
 				// Ping checking
 				bool killed = false;
