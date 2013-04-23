@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Xml;
 using System.IO;
+using NLog;
 
 namespace ServerChecker2012
 {
@@ -90,15 +91,17 @@ namespace ServerChecker2012
 				}
 
 		}
+
+	    private static Logger log = LogManager.GetLogger("MainLog");
 		public static void PushError(string error, string from)
 		{
             // Don't clog up whatever thread is causing an error right now
             MainWindow.Invoke(new Action(()=>MessageBox.Show(MainWindow, error, from + " Error!", MessageBoxButtons.OK, MessageBoxIcon.Error)));
-			// TODO: Logging
+			log.Error(string.Format("[{0}] {1}", from, error));
 		}
 		public static void PushInfo(string info, string from)
 		{
-			// TODO: Logging
+			log.Info(string.Format("[{0}] {1}", from, info));
 		}
 	}
 }
